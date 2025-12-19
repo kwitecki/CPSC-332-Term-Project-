@@ -71,6 +71,91 @@ mysql -u root -p university_db < sql/test_requirements.sql
 - Enumerated Values: Grades and sex fields use controlled vocabularies
 - Data Validation: Check constraints prevent self-referencing prerequisites
 
+## Deployment in Restricted Environments
+
+If you need to deploy this project in an environment where you don't have `sudo` access, follow these steps:
+
+### Prerequisites
+- PHP CLI access with PDO and MySQL extensions
+- Access to a MySQL/MariaDB database (credentials provided by hosting/admin)
+- Ability to create files in your directory
+
+### Step-by-Step Deployment
+
+#### 1. Check PHP Extensions
+```bash
+php -m | grep -i pdo
+php -m | grep -i mysql
+```
+If these extensions are missing, contact your administrator or use a different server.
+
+#### 2. Upload Project Files
+Transfer all project files to target directory, maintaining the folder structure.
+
+#### 3. Set Up Database
+Since you can't use `sudo mysql`, you'll need to use provided database credentials:
+
+**Option A: Using MySQL CLI (if available)**
+```bash
+mysql -h hostname -u username -p database_name < sql/schema.sql
+mysql -h hostname -u username -p database_name < sql/sample.sql
+```
+
+**Option B: Using phpMyAdmin or Web Interface**
+- Copy the contents of `sql/schema.sql` and execute it
+- Copy the contents of `sql/sample.sql` and execute it
+
+#### 4. Configure Database Connection
+You have two options for setting up database credentials:
+
+**Option A: Edit `app/db.php` directly (simpler)**
+```php
+// Replace the fallback values in app/db.php:
+$host = 'your_mysql_host';      // e.g., 'mysql.example.com'
+$db   = 'your_database_name';   // e.g., 'user123_university'  
+$user = 'your_username';        // e.g., 'user123_web'
+$pass = 'your_password';        // provided password
+```
+
+**Option B: Create `.env` file (recommended)**
+```bash
+# Create .env with your actual credentials:
+echo "DB_HOST=mysql.example.com
+DB_NAME=user123_university
+DB_USER=user123_web
+DB_PASS=provided_password
+DB_CHARSET=utf8mb4" > .env
+```
+
+#### 5. Start the Application
+```bash
+# Run from project root directory:
+php -S localhost:8000 -t public
+```
+
+### Common Shared Hosting Scenarios
+
+**Typical shared hosting credentials might look like:**
+```env
+DB_HOST=mysql.yourhostingprovider.com
+DB_NAME=username_university_db
+DB_USER=username_dbuser
+DB_PASS=randomly_generated_password
+DB_CHARSET=utf8mb4
+```
+
+**Key differences from local development:**
+- Database host is often not `localhost`
+- Database names are usually prefixed with your username
+- You use existing credentials rather than creating new MySQL users
+- You may need to import SQL files through a web interface
+
+### Troubleshooting
+- **"could not find driver"**: PHP MySQL extension not installed - contact admin
+- **"Access denied"**: Check database credentials with your hosting provider
+- **"Unknown database"**: Ensure database was created and SQL files imported
+- **Connection refused**: Verify the correct database host/port
+
 ## Notes
 - Ensure only the `public/` directory is exposed if hosting behind Apache/Nginx.
 - If you don't have Composer available, you can skip the `.env` file and edit database credentials directly in `app/db.php`.

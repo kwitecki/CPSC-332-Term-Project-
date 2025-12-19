@@ -4,30 +4,14 @@ $pdo = db();
 
 $sections = [];
 if (isset($_GET['course_no'])) {
-  $stmt = $pdo->prepare("
-    SELECT s.course_no, s.section_no, s.classroom, s.meeting_days, s.start_time, s.end_time,
-           COUNT(e.id) AS enrolled
-    FROM sections s
-    LEFT JOIN enrollments e
-      ON e.course_no = s.course_no AND e.section_no = s.section_no
-    WHERE s.course_no = ?
-    GROUP BY s.course_no, s.section_no, s.classroom, s.meeting_days, s.start_time, s.end_time
-    ORDER BY s.section_no
-  ");
+  $stmt = $pdo->prepare("SELECT s.course_no, s.section_no, s.classroom, s.meeting_days, s.start_time, s.end_time, COUNT(e.id) AS enrolled FROM sections s LEFT JOIN enrollments e ON e.course_no = s.course_no AND e.section_no = s.section_no WHERE s.course_no = ? GROUP BY s.course_no, s.section_no, s.classroom, s.meeting_days, s.start_time, s.end_time ORDER BY s.section_no");
   $stmt->execute([$_GET['course_no']]);
   $sections = $stmt->fetchAll();
 }
 
 $history = [];
 if (isset($_GET['cw_id'])) {
-  $stmt = $pdo->prepare("
-    SELECT c.course_no, c.title, s.section_no, e.grade
-    FROM enrollments e
-    JOIN sections s ON s.course_no = e.course_no AND s.section_no = e.section_no
-    JOIN courses  c ON c.course_no = e.course_no
-    WHERE e.cw_id = ?
-    ORDER BY c.course_no, s.section_no
-  ");
+  $stmt = $pdo->prepare("SELECT c.course_no, c.title, s.section_no, e.grade FROM enrollments e JOIN sections s ON s.course_no = e.course_no AND s.section_no = e.section_no JOIN courses c ON c.course_no = e.course_no WHERE e.cw_id = ? ORDER BY c.course_no, s.section_no");
   $stmt->execute([$_GET['cw_id']]);
   $history = $stmt->fetchAll();
 }
@@ -36,8 +20,7 @@ ob_start(); ?>
 <section>
   <h2>(a) Sections for a Course</h2>
   <form method="get">
-    <label>Course No: <input name="course_no" placeholder="CPSC332"
-      value="<?= htmlspecialchars($_GET['course_no'] ?? '') ?>"></label>
+    <label>Course No: <input name="course_no" placeholder="CPSC332" value="<?= htmlspecialchars($_GET['course_no'] ?? '') ?>"></label>
     <button type="submit">Search</button>
   </form>
   <?php if ($sections): ?>
@@ -65,8 +48,7 @@ ob_start(); ?>
 <section>
   <h2>(b) Course History for a Student</h2>
   <form method="get">
-    <label>CWID: <input name="cw_id" placeholder="000000001"
-      value="<?= htmlspecialchars($_GET['cw_id'] ?? '') ?>"></label>
+    <label>CWID: <input name="cw_id" placeholder="000000001" value="<?= htmlspecialchars($_GET['cw_id'] ?? '') ?>"></label>
     <button type="submit">Lookup</button>
   </form>
   <?php if ($history): ?>
