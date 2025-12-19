@@ -5,8 +5,8 @@ function db(): PDO {
 
   $host = $_ENV['DB_HOST'] ?? '127.0.0.1';
   $db   = $_ENV['DB_NAME'] ?? 'university_db';
-  $user = $_ENV['DB_USER'] ?? 'webapp';
-  $pass = $_ENV['DB_PASS'] ?? 'webapp_password';
+  $user = $_ENV['DB_USER'] ?? 'root';
+  $pass = $_ENV['DB_PASS'] ?? '';
   $charset = $_ENV['DB_CHARSET'] ?? 'utf8mb4';
 
   $dsn = "mysql:host=$host;dbname=$db;charset=$charset";

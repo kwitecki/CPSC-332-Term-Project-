@@ -106,26 +106,18 @@ mysql -h hostname -u username -p database_name < sql/sample.sql
 - Copy the contents of `sql/sample.sql` and execute it
 
 #### 4. Configure Database Connection
-You have two options for setting up database credentials:
+**IMPORTANT:** Without Composer installed, `.env` files are NOT loaded. You MUST edit `app/db.php` directly.
 
-**Option A: Edit `app/db.php` directly (simpler)**
+**Edit `app/db.php` with your credentials:**
 ```php
-// Replace the fallback values in app/db.php:
-$host = 'your_mysql_host';      // e.g., 'mysql.example.com'
-$db   = 'your_database_name';   // e.g., 'user123_university'  
-$user = 'your_username';        // e.g., 'user123_web'
-$pass = 'your_password';        // provided password
+// Replace the fallback values in app/db.php (lines 6-10):
+$host = 'your_mysql_host';      // e.g., 'mysql.example.com' or 'localhost'
+$db   = 'your_database_name';   // e.g., 'user123_university' or 'university_db'
+$user = 'your_username';        // e.g., 'user123_web' (credentials from hosting)
+$pass = 'your_password';        // provided password from hosting/admin
 ```
 
-**Option B: Create `.env` file (recommended)**
-```bash
-# Create .env with your actual credentials:
-echo "DB_HOST=mysql.example.com
-DB_NAME=user123_university
-DB_USER=user123_web
-DB_PASS=provided_password
-DB_CHARSET=utf8mb4" > .env
-```
+**Note:** The default values (`root` with empty password) are for local development only. In restricted/shared hosting environments, use the database credentials provided by your hosting provider or administrator.
 
 #### 5. Start the Application
 ```bash
