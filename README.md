@@ -31,21 +31,21 @@ This database project meets all specified requirements:
 
 ## Setup
 1. Install PHP 7.4+ with PDO MySQL and access to a MySQL/MariaDB server.
-2. Create a database (e.g., `university`) and load the schema then sample data:
-   - `mysql -u root -p university < sql/schema.sql`
-   - `mysql -u root -p university < sql/sample.sql`
+2. Create a database (e.g., `university_db`) and load the schema then sample data:
+   - `sudo mysql < sql/schema.sql`
+   - `sudo mysql < sql/sample.sql`
 3. Configure database connection by either:
    - **Option A**: Create a `.env` file in the project root:
      ```
      DB_HOST=127.0.0.1
-     DB_NAME=university
+     DB_NAME=university_db
      DB_USER=root
      DB_PASS=your_password
      DB_CHARSET=utf8mb4
      ```
    - **Option B**: Edit `app/db.php` directly with your database credentials
 4. Start the PHP built-in server from the repo root:
-   `php -S localhost:8000 -t public public/index.php`
+   `php -S localhost:8000 -t public`
 
 ## Usage
 - Home: http://localhost:8000/
@@ -55,7 +55,7 @@ This database project meets all specified requirements:
 ## Testing & Verification
 To verify all requirements are met, run the test queries:
 ```bash
-mysql -u root -p university < sql/test_requirements.sql
+mysql -u root -p university_db < sql/test_requirements.sql
 ```
 
 ### Sample Test Data:

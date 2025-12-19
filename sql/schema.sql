@@ -1,3 +1,7 @@
+-- Create database and use it
+CREATE DATABASE IF NOT EXISTS university_db;
+USE university_db;
+
 -- Drop in dependency order (dev convenience)
 DROP TABLE IF EXISTS enrollments, student_minors, sections, course_prereqs,
   courses, students, professors, professor_degrees, departments;

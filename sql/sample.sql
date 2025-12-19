@@ -1,3 +1,6 @@
+-- Use the university database
+USE university_db;
+
 -- Departments
 INSERT INTO departments (dept_name, dept_phone, office_location) VALUES
 ('Computer Science','657-278-3700','CS-200'),
